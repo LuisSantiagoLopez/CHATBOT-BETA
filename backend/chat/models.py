@@ -7,10 +7,14 @@ class ChatSession(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # Stores the time when the session was created
     state = models.CharField(  # The current state in the decision tree ('IDEA', 'IMAGE', 'CAPTION')
         max_length=15,
-        choices=[('IDEA', 'Idea'), ('IMAGE', 'Image'), ('CAPTION', 'Caption')],
-        default='IDEA'
+        choices=[('BUSINESS', 'Business'), ('CHANGE_BUSINESS', 'Change_Business'), ('IDEA', 'Idea'), ('CHANGE_IDEA', 'Change_Idea'), ('IMAGE', 'Image'), ('CHANGE_IMAGE', 'Change_Image'), ('CAPTION', 'Caption'), ('CHANGE_CAPTION', 'Change_Caption'), ('FINAL', 'Final')],
+        default='BUSINESS'
     )
-    decision_tree_state = models.JSONField(null=True)  # Dynamic field to store the state of the decision tree for more complex flows
+    business_name = models.TextField(null=True, blank=True)
+    business_description = models.TextField(null=True, blank=True)
+    target_audience = models.TextField(null=True, blank=True)
+    writing_style = models.TextField(null=True, blank=True)
+    image_style = models.TextField(null=True, blank=True)
 
 # Model for tracking all messages in a chat session
 class ChatLog(models.Model):
@@ -19,7 +23,7 @@ class ChatLog(models.Model):
         ('USER', 'User'),
         ('AI', 'AI'),
     ]
-    chat_session = models.ForeignKey(ChatSession, on_delete=models.CASCADE)  # Linking each message to a chat session
+    chat_session = models.ForeignKey(ChatSession, on_delete=models.CASCADE)  # GPT4 deberá tener memoria de cada sesión. Igual que en chatgpt tienen que haber distintas conversaciones. 
     message_type = models.CharField(max_length=10, choices=SESSION_TYPE_CHOICES)  # Type of the message
     message_content = models.TextField()  # Content of the message
     timestamp = models.DateTimeField(auto_now_add=True)  # Time when the message was sent
