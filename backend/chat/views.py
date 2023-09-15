@@ -2,17 +2,22 @@
 La arquitectura es la siguiente:
 1. Hay un state o estado en el que la conversación está
 2. La view del API llamada "decision tree" hace routing para cada función dependiendo del botón que el usuario presionó en el frontend así como el estado actual en el que se encuentra. 
-3. La función correspondiente procesa el request, cambia el estado si es necesario, y devuelve el request. 
+3. La función correspondiente procesa el request, cambia el estado si es necesario, y devuelve el response. 
 """
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view, authentication_classes, permission_classes # todo esto es para convertir un view normal en un api endpoint en el que solamente personas autenticadas pueden entrar
 from .models import ChatSession
+from .models import 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
-from user_management.models import UserProfile # importamos el user profile de la app "user_management" para guardar los datos del usuario
+from .serializers import SessionIdSerializer
 
+# Defino la sesión afuera para que sea una variable global
+session = None
+
+# Esta función es estándar para las 6 funciones principales.
 def handle_request(request, session, current_state, button, action, new_state=None, message=''):
     data = request.data
     if session.state == current_state and button == action.__name__:
@@ -28,20 +33,23 @@ def handle_request(request, session, current_state, button, action, new_state=No
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def decision_tree(request):
-    existing_sessions = ChatSession.objects.filter(user_profile=user_profile_instance)
-    
-    if not existing_sessions.exists():
-        ChatSession.objects.create(
-            user_profile=request.user,
-            state='BUSINESS'
-        )
-
-    session = ChatSession.objects.get(user_profile=request.user)
+    data = request.data
     button = data.get('button')
     
-    # Cuando el usuario presione mandar datos negocio, la sesión cambiará a change business con las opciones "cambiar datos negocio" que hará que regresen a este estado, o "guardar datos negocio" que solamente cambiará el estado a idea. 
+    # Aquí estamos creando una nueva sesión por si pican el botón de create session
+    if button == crear_sesion_chat:
+        # Definimos el current session y el serializer de la función y luego lo mandamos de regreso al frontend. Así cuando un usuario cambie de un chat id a otro el backend también lo procesa. 
+        session, serializer = crear_sesion_chat(request, data)
+        return Response({'session_id': serializer.data}, status=status.HTTP_201_CREATED)
+
+    # Aquí estamos cambiando el current session 
+    if button == cambiar_sesion_chat:
+        new_session_id = data.get('session_id')
+        session = ChatSession.objects.get(session_id=new_session_id)
+
+    # Cuando el usuario presione para mandar los datos del negocio, guardaremos sus datos relacionados a una sola sesión de chat. 
     # el flow en términos de botones es: mandar datos negocio -> guardar datos negocio o cambiar datos negocio -> idea
-    response = handle_request(request, session, 'BUSINESS', button, mandar_datos_negocio, new_state='CHANGE_BUSINESS', message='Los datos del negocio se guardaron exitosamente en la base de datos.')
+    response = handle_request(request, session, 'BUSINESS', button , mandar_datos_negocio, new_state='CHANGE_BUSINESS', message='Los datos del negocio se guardaron exitosamente en la base de datos.')
     if response:
         return response
 
@@ -101,13 +109,18 @@ def decision_tree(request):
         return response
 
 
-def mandar_datos_negocio(request, data):
-    UserProfile.objects.create(
-        user = request.user
-        business_description = data.business_description
-        target_audience = data.target_audience
-        image_style = data.image_style
+def crear_sesion_chat(request, data):
+    new_session = ChatSession.objects.create(
+        user=request.user,
+        state='BUSINESS'
     )
+    new_session.save()
+    serializer = SessionIdSerializer(new_session)
+
+    # Aquí mandamos la sesión de chat de regreso, así como los datos serializados para luego mandar el response 
+    return new_session, serializer
+
+def mandar_datos_negocio(request, data):
 
 def guardar_datos_negocio(request, data):
     return null

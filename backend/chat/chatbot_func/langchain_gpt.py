@@ -12,9 +12,10 @@ from token_usage import token_usage
 from .models import ChatSession
 
 def gpt4_langchain()
+    # Lo primero que tengo que hacer es definir la sesión de chat a partir de los datos que el usuario proveyó en ChatSession
 
-    # Sep 14: te quedaste aquí, intentando que el mensaje al sistema conozca el nombre del negocio. Quieres probar si el código que hiciste para langchain todavía funciona. 
-    system_message_template = f"You are a community manager for {ChatSession.}
+
+    system_message_template = f"You are a community manager for {}
     
     You are a helpful instagram content creator for this client's instagram: '{variables['program_description']}' with this target audience: '{variables['target_segment']}'. Help them execute a variety of tasks related with their instagram content marketing."
 
