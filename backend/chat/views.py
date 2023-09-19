@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
-from user_management.models import UserProfile # importamos el user profile de la app "user_management" para guardar los datos del usuario
+from backend.user_management.models import UserProfile
 
 def handle_request(request, session, current_state, button, action, new_state=None, message=''):
     data = request.data
@@ -103,10 +103,10 @@ def decision_tree(request):
 
 def mandar_datos_negocio(request, data):
     UserProfile.objects.create(
-        user = request.user
-        business_description = data.business_description
-        target_audience = data.target_audience
-        image_style = data.image_style
+        user = request.user,
+        business_description = data.business_description,
+        target_audience = data.target_audience,
+        image_style = data.image_style,
     )
 
 def guardar_datos_negocio(request, data):
