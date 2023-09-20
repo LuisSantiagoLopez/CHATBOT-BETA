@@ -1,5 +1,5 @@
-from langchain_gpt import chatgpt_langchain
-from .models import BusinessDetails, Ideas
+from .langchain_gpt import chatgpt_langchain
+from ..models import BusinessDetails, Idea
 import json 
 import openai
 
@@ -22,7 +22,7 @@ def create_image_py(session):
 
     prompt = f"""Tu tarea es crear una descripción de una ilustración representativa para la idea dentro de triple comillas invertidas. Incorpora el estilo del negocio señalado a continuación. La descripción debe ser corta y la ilustración representativa de la idea. 
     La descripción debe incluir el estilo de la ilustración. Evita descripciones que requieran figuras humanas y caras. Al crear tu descripción, por favor considera cualquier retroalimentación previa del negocio. Tu resultado únicamente debe ser un diccionario JSON con la clave 'design_prompt'.
-    Estilo del negocio: "{session_business_details.image_style}",
+    Estilo del negocio: '{session_business_details.image_style}',
     Idea: ```{chosen_idea_idea_field_str}```"""
 
     image_prompt_español = chatgpt_langchain(prompt, session, "gpt-4")
@@ -48,8 +48,8 @@ def change_image_py(data, session):
 
     prompt = f"""Tu tarea es recibir la retroalimentación dentro de triple comillas invertidas del negocio a tu descripción de una ilustración anterior y crear una nueva descripción para la idea señalada a continuación. La descripción debe ser corta y la ilustración representativa de la idea. La descripción debe incluir el estilo de la ilustración. Evita descripciones que requieran figuras humanas y caras. Tu resultado debe ser únicamente un diccionario JSON con la clave 'design_prompt'.
     Retroalimentación: ```{data.get('feedback')}```,
-    Estilo del negocio: "{session_business_details.image_style}",
-    Idea: "{chosen_idea_idea_field_str}""""
+    Estilo del negocio: '{session_business_details.image_style}',
+    Idea: '{chosen_idea_idea_field_str}'"""
 
     image_prompt_español = chatgpt_langchain(prompt, session, "gpt-4")
     image_prompt_español_pydict = json.loads(image_prompt_español)

@@ -5,16 +5,17 @@ La arquitectura es la siguiente:
 3. La función correspondiente procesa el request, cambia el estado si es necesario, y devuelve el response. 
 """
 from rest_framework.decorators import api_view, authentication_classes, permission_classes # todo esto es para convertir un view normal en un api endpoint en el que solamente personas autenticadas pueden entrar
-from .models import ChatSession, Idea, Image, Caption, UserPost
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
 from .serializers import SessionIdSerializer
+from .models import ChatSession, Idea, Image, Caption, UserPost
 from .chatbot_func.idea import create_idea_py, change_idea_py
 from .chatbot_func.image import create_image_py, change_image_py
 from .chatbot_func.caption import create_caption_py, change_caption_py
+
 
 # Defino la sesión afuera para que sea una variable global
 session = None
@@ -124,7 +125,7 @@ def mandar_datos_negocio(session, request, data):
     BusinessData.objects.create(
     chat_session=session,
     business_name=data.get('business_name'),
-    business_description=data.get('business_description',
+    business_description=data.get('business_description'),
     target_audience=data.get('target_audience'),
     writing_style=data.get('writing_style'),
     image_style=data.get('image_style'),

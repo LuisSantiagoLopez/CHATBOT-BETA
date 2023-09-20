@@ -8,8 +8,7 @@ from langchain.chains import ConversationChain, LLMChain
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.callbacks import get_openai_callback
-from .models import ChatSession, BusinessDetails, ChatLog
-
+from ..models import ChatSession, BusinessDetails, ChatLog
 def chatgpt_langchain(session, prompt, model):
 
     # Guardamos el mensaje del usuario como el prompt. 
@@ -42,8 +41,8 @@ def chatgpt_langchain(session, prompt, model):
 
     # Este es el mensaje base del chat
     system_message_template = f"""Eres un útil administrador de comunidad de Instagram para {session_business_details.business_name}. Tu tarea es ayudarles a crear una publicación para su feed de Instagram. Se te pedirá que hagas una de las siguientes cosas: crear una idea, modificar una idea, crear una imagen, modificar una imagen, crear un pie de foto o modificar un pie de foto. Al hacerlo, debes tener en cuenta los detalles del negocio:
-    Descripción del negocio: "{session_business_details.business_description}",
-    Público objetivo: "{session_business_details.target_audience}""""
+    Descripción del negocio: '{session_business_details.business_description}',
+    Público objetivo: '{session_business_details.target_audience}'"""
 
     # Montamos el mensaje con el chat prompt (system message), el prompt proviniente de la función, y el placeholder que es para guardar memoria 
     chat_prompt = ChatPromptTemplate.from_messages([
