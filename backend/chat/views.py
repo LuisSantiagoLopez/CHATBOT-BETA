@@ -10,11 +10,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
+<<<<<<< HEAD
 from .serializers import SessionIdSerializer
 from .models import ChatSession, Idea, Image, Caption, UserPost
 from .chatbot_func.idea import create_idea_py, change_idea_py
 from .chatbot_func.image import create_image_py, change_image_py
 from .chatbot_func.caption import create_caption_py, change_caption_py
+=======
+from backend.user_management.models import UserProfile
+>>>>>>> Sesiones
 
 
 # Defino la sesión afuera para que sea una variable global
@@ -110,7 +114,6 @@ def decision_tree(request):
     if response:
         return response
 
-
 def crear_sesion_chat(session, request, data):
     new_session = ChatSession.objects.create(
         user=request.user,
@@ -121,14 +124,12 @@ def crear_sesion_chat(session, request, data):
     # Aquí mandamos la sesión de chat de regreso, así como los datos serializados para luego mandar el response 
     return new_session, serializer
 
-def mandar_datos_negocio(session, request, data):
-    BusinessData.objects.create(
-    chat_session=session,
-    business_name=data.get('business_name'),
-    business_description=data.get('business_description'),
-    target_audience=data.get('target_audience'),
-    writing_style=data.get('writing_style'),
-    image_style=data.get('image_style'),
+def mandar_datos_negocio(request, data):
+    UserProfile.objects.create(
+        user = request.user,
+        business_description = data.business_description,
+        target_audience = data.target_audience,
+        image_style = data.image_style,
     )
 
     return {'business_name':business_name, 'business_description':business_description, 'target_audience':target_audience, 'writing_style':writing_style, 'image_style':image_style}
