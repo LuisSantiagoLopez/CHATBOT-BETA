@@ -12,6 +12,9 @@ from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
 from .serializers import SessionIdSerializer
+from .chatbot_func.idea import create_idea_py, change_idea_py
+from .chatbot_func.image import create_image_py, change_image_py
+from .chatbot_func.caption import create_caption_py, change_caption_py
 
 # Defino la sesión afuera para que sea una variable global
 session = None
