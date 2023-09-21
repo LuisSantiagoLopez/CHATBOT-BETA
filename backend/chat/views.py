@@ -10,15 +10,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
 from rest_framework.permissions import IsAuthenticated 
-<<<<<<< HEAD
 from .serializers import SessionIdSerializer
 from .models import ChatSession, Idea, Image, Caption, UserPost
 from .chatbot_func.idea import create_idea_py, change_idea_py
 from .chatbot_func.image import create_image_py, change_image_py
 from .chatbot_func.caption import create_caption_py, change_caption_py
-=======
-from backend.user_management.models import UserProfile
->>>>>>> Sesiones
 
 
 # Defino la sesión afuera para que sea una variable global
