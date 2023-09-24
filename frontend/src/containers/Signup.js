@@ -11,6 +11,7 @@ const Signup = ({ signup, isAuthenticated }) => {
     last_name: "",
     email: "",
     password: "",
+    re_password: "",
   });
 
   const { first_name, last_name, email, password, re_password } = formData;
@@ -21,8 +22,10 @@ const Signup = ({ signup, isAuthenticated }) => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    signup(first_name, last_name, email, password, re_password);
-    setAccountCreated(true);
+    if (password === re_password) {
+      signup(first_name, last_name, email, password, re_password);
+      setAccountCreated(true);
+    }
   };
 
   const continueWithGoogle = async () => {
@@ -97,6 +100,18 @@ const Signup = ({ signup, isAuthenticated }) => {
             placeholder="Password*"
             name="password"
             value={password}
+            onChange={(e) => onChange(e)}
+            minLength="6"
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            className="form-control"
+            type="password"
+            placeholder="Confirm Password*"
+            name="re_password"
+            value={re_password}
             onChange={(e) => onChange(e)}
             minLength="6"
             required
