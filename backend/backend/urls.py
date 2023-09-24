@@ -5,11 +5,9 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user_management/', include('user_management.urls')),
-    # path('chatbot/', include('chat.urls')),
-    # path('api-token-auth', views.obtain_auth_token),
+    path('chatbot/', include('chat.urls')),
     path(r'auth/', include('djoser.urls')),
     path(r'auth/', include('djoser.urls.jwt')),
-
 ]
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
