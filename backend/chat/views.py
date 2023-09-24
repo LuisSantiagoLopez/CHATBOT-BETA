@@ -37,6 +37,8 @@ def handle_request(request, data, session, current_state, button, action, new_st
 def decision_tree(request):
     data = request.data
     button = data.get('button')
+
+    """En el frontend, tengo que hacer una lista de los chat sessions que el usuario ha creado. Cuando se inicie la aplicación, por default estará abierto un chat nuevo, como en chatgpt, pero después el usuario puede seleccionar un título. El título de cada chat tiene que ser el título del negocio. Cuando un usuario seleccione un chat, el backend tiene que mandar el historial de mensajes al frontend para que cargue la conversación."""
     
     # Aquí estamos creando una nueva sesión por si pican el botón de create session
     if button == crear_sesion_chat:
@@ -191,6 +193,7 @@ def guardar_caption(session, request, data):
     caption.approved = True
     caption.save()
 
+# Recuerda que aquí tiene que ser por chat seesion 
 def guardar_publicación(session, request, data):
     last_chosen_idea = Idea.objects.filter(session=session, chosen=True).last()
     last_chosen_image = Image.objects.filter(session=session, chosen=True).last()
