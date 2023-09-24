@@ -109,7 +109,6 @@ def decision_tree(request):
     if response:
         return response
 
-
 def crear_sesion_chat(session, request, data):
     new_session = ChatSession.objects.create(
         user=request.user,
@@ -120,14 +119,12 @@ def crear_sesion_chat(session, request, data):
     # Aquí mandamos la sesión de chat de regreso, así como los datos serializados para luego mandar el response 
     return new_session, serializer
 
-def mandar_datos_negocio(session, request, data):
-    BusinessData.objects.create(
-    chat_session=session,
-    business_name=data.get('business_name'),
-    business_description=data.get('business_description'),
-    target_audience=data.get('target_audience'),
-    writing_style=data.get('writing_style'),
-    image_style=data.get('image_style'),
+def mandar_datos_negocio(request, data):
+    UserProfile.objects.create(
+        user = request.user,
+        business_description = data.business_description,
+        target_audience = data.target_audience,
+        image_style = data.image_style,
     )
 
     return {'business_name':business_name, 'business_description':business_description, 'target_audience':target_audience, 'writing_style':writing_style, 'image_style':image_style}
