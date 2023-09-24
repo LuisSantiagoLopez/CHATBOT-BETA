@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 # Modelo para crear una sesión de chat 
 class ChatSession(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     session_id = models.IntegerField(unique=True, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Momento en el que se creó la sesión 
     state = models.CharField(  # El estado en el que está la sesión de chat. De esto depende cómo cambia el frontend.  
@@ -74,7 +74,7 @@ class Caption(models.Model):
 
 # Este modelo guarda una publicación entera en la base de datos para poder enseñársela después al usuario. Falta desarrollar esta parte 
 class UserPost(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     idea = models.OneToOneField(Idea, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.OneToOneField(Image, on_delete=models.SET_NULL, null=True, blank=True)
     caption = models.OneToOneField(Caption, on_delete=models.SET_NULL, null=True, blank=True)

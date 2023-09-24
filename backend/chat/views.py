@@ -5,11 +5,9 @@ La arquitectura es la siguiente:
 3. La función correspondiente procesa el request, cambia el estado si es necesario, y devuelve el response. 
 """
 from rest_framework.decorators import api_view, authentication_classes, permission_classes # todo esto es para convertir un view normal en un api endpoint en el que solamente personas autenticadas pueden entrar
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status 
-from rest_framework.permissions import IsAuthenticated 
 from .serializers import SessionIdSerializer
 from .models import ChatSession, Idea, Image, Caption, UserPost
 from .chatbot_func.idea import create_idea_py, change_idea_py
@@ -32,7 +30,6 @@ def handle_request(request, data, session, current_state, button, action, new_st
 
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def decision_tree(request):
     data = request.data
